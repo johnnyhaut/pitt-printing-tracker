@@ -1,0 +1,20 @@
+<html>
+    <head>
+        <title> The Map </title>
+    </head>
+
+    <body>
+        <h1> The Map </h1> 
+
+        {% comment %} List out all printer locations, types, and status {% endcomment %}
+        <ul id="printers_ul"> 
+            {% for printer in printers %}
+                <li class="printers_li">
+                    <h2>Printer Location: {{printer.location}}
+                    <h3>{{printer.type}} Printer</h3> 
+                    <h3>Status: {{printer.status}}</h3> 
+                <li> 
+            {% endfor %}
+        </ul> 
+    </body> 
+</html>
