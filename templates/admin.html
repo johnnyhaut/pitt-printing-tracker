@@ -1,0 +1,28 @@
+<html>
+    <head>
+        <title>Admin Panel</title>
+    </head>
+
+    <body>
+        <h1>Pitt Print Tracker Admin</h1>
+        <h2>All Pitt Printers</h2>
+        <h2>Add New Printer</h2>
+
+        <form action="{{new_printer_summary_reference}}" method="POST"> 
+
+            <p>Printer Location: </p>
+            <input id="newPrinterLocation" name="newPrinterLocation"></label>
+
+            <p>Printer Type: </p>
+            <input id="newPrinterType" name="newPrinterType"></label>
+
+            <p>Printer Status: </p>
+            <input id="newPrinterStatus" name="newPrinterStatus"></label>
+
+            <br><br>
+
+            <input id="submit_button" type="submit" value="Add Printer">
+        </form> 
+
+    </body>
+</html>
