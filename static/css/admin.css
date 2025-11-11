@@ -5,6 +5,9 @@ body {
 #printers_ul {
     list-style-type: none;
     text-align: center;
+    height: auto;
+    width: 100%;
+    min-height: 200px;
 }
 
 .printers_li {

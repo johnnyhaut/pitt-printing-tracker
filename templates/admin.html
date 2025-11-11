@@ -1,28 +1,47 @@
 <html>
     <head>
         <title>Admin Panel</title>
+        <link rel="stylesheet" type="text/css" href="{{style}}">
     </head>
 
     <body>
         <h1>Pitt Print Tracker Admin</h1>
-        <h2>All Pitt Printers</h2>
-        <h2>Add New Printer</h2>
+        <div>
+            <h2>All Pitt Printers</h2>
 
-        <form action="{{new_printer_summary_reference}}" method="POST"> 
+            <ul id="printers_ul"> 
+                {% for printer in printers %}
+                    <li class="printers_li">
+                        <h3>Printer Location: {{printer.printer_location}}
+                        <h3>{{printer.printer_type}} Printer</h3> 
+                        <h3>Status: {{printer.printer_status}}</h3> 
+                        <button>Printer Broken?</button>
 
-            <p>Printer Location: </p>
-            <input type="text" id="newPrinterLocation" name="newPrinterLocation"></label>
+                        {% if printer.printer_status == "Offline" %}
+                            <button>Printer Fixed?</button>
+                        {% endif %}
+                    <li> 
+                {% endfor %}
+            </ul> 
+        </div>
+        <div>
+            <h2>Add New Printer</h2>
 
-            <p>Printer Type: </p>
-            <input type="text" id="newPrinterType" name="newPrinterType"></label>
+            <form action="{{new_printer_summary_reference}}" method="POST"> 
 
-            <p>Printer Status: </p>
-            <input type="text" id="newPrinterStatus" name="newPrinterStatus"></label>
+                <p>Printer Location: </p>
+                <input type="text" id="newPrinterLocation" name="newPrinterLocation"></label>
 
-            <br><br>
+                <p>Printer Type: </p>
+                <input type="text" id="newPrinterType" name="newPrinterType"></label>
 
-            <input id="submit_button" type="submit" value="Add Printer">
-        </form> 
+                <p>Printer Status: </p>
+                <input type="text" id="newPrinterStatus" name="newPrinterStatus"></label>
 
+                <br><br>
+
+                <input id="submit_button" type="submit" value="Add Printer">
+            </form> 
+        </div> 
     </body>
 </html>

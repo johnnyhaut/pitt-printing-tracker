@@ -17,7 +17,8 @@ db_session = Session()
 
 # This is in place of the Pitt Passport 
 users = {"john":"pitt123", "marcos":"pitt123", "brandon":"pitt123",
-         "enzo":"pitt123", "deonte":"pitt123", "sahil":"pitt123",}
+         "enzo":"pitt123", "deonte":"pitt123", "sahil":"pitt123",
+         "admin":"pw"}
 
 # Default Route sends user to the Pitt Passport 
 @app.route("/")
@@ -35,7 +36,7 @@ def login_controller():
 
     # process HTTP GET requests, first time accessing page 
     if request.method == "GET":
-        return render_template("login.html")
+        return render_template("login.html", style=url_for('static', filename='css/login.css'), passport = url_for('static', filename='images/passport-header.png'))
 
     # process HTTP POST requests, user clicked the login button 
     elif request.method == "POST":
@@ -95,8 +96,15 @@ def map():
 # Used to display the admin panel 
 @app.route("/admin/")
 def admin(): 
+    printers = db_session.query(Printer).all()
+    printersInJSONFormat = []
+    for printer in printers: 
+        printersInJSONFormat.append(printer.toJSON())
+        
     return render_template("admin.html", 
-                           new_printer_summary_reference=url_for("printer_summary")
+                           new_printer_summary_reference=url_for("printer_summary"), 
+                           printers= printersInJSONFormat, 
+                           style = url_for('static', filename='css/admin.css')
                            )
 
 # Used to show a summary of the new printer added 
