@@ -10,14 +10,14 @@ class Printer(Base):
     __tablename__ = "printers"
     
     id = Column("id", Integer, primary_key=True, autoincrement=True)
-    location = Column("location", String, nullable=False)
-    type = Column("type", String, nullable=False) 
-    status = Column("status",String, nullable=False)
+    printer_location = Column("location", String, nullable=False)
+    printer_type = Column("type", String, nullable=False) 
+    printer_status = Column("status",String, nullable=False)
     
     # Returns an easily readable JSON containing all of the important printer infomration 
     def toJSON(self): 
         return {
             "id":self.id, 
-            "location":self.location, 
-            "type":self.type,
-            "status":self.status}
+            "printer_location":self.printer_location, 
+            "printer_type":self.printer_type,
+            "printer_status":self.printer_status}

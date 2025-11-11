@@ -1,5 +1,5 @@
 # Imports for displaying pages to the user 
-from flask import Flask, redirect, url_for, request, session, render_template, abort 
+from flask import Flask, redirect, url_for, request, session, render_template, abort, jsonify
 
 # Imports for database information 
 from printer_model import Base, Printer  
@@ -88,7 +88,8 @@ def map():
         
     return render_template("map.html",
         printers = printersInJSONFormat, 
-        reference_to_logout= url_for("unlogger")
+        reference_to_logout= url_for("unlogger"),
+        style = url_for('static', filename='css/map.css')
     )
 
 # Used to display the admin panel 
@@ -103,10 +104,20 @@ def admin():
 def printer_summary(): 
     printersLocation = request.form.get("newPrinterLocation"); 
     printersType = request.form.get("newPrinterType"); 
+    printersStatus = request.form.get("newPrinterStatus"); 
+    
+    printer_obj = Printer(
+                    printer_location = printersLocation,
+                    printer_type = printersType,
+                    printer_status = printersStatus
+                    )
 
-    print(printersLocation); 
-    print(printersType); 
-    return "OKAY"
+    try: 
+        db_session.add(printer_obj); 
+        db_session.commit()
+        return render_template("printer_summary.html")
+    except:     
+        return "There was an issue adding to the database"
 
 @app.route("/admin/delete_printer/<printer_id>")
 def delete_printer(printer_id): 

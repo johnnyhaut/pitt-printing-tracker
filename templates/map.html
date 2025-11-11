@@ -1,19 +1,26 @@
 <html>
     <head>
         <title> The Map </title>
+            <link rel="stylesheet" type="text/css" href="{{style}}">
+
     </head>
 
     <body>
-        <h1> The Map </h1> 
-        <a href="{{reference_to_logout}}">Click Here to Logout</a> 
+        <div id="topLine"> 
+            <h1> The Map </h1> 
+            <a href="{{reference_to_logout}}">Click Here to Logout</a> 
+        </div> 
+
         <ul id="printers_ul"> 
             {% for printer in printers %}
                 <li class="printers_li">
-                    <h2>Printer Location: {{printer.location}}
-                    <h3>{{printer.type}} Printer</h3> 
-                    <h3>Status: {{printer.status}}</h3> 
+                    <h3>Printer Location: {{printer.printer_location}}
+                    <h3>{{printer.printer_type}} Printer</h3> 
+                    <h3>Status: {{printer.printer_status}}</h3> 
+                    <button>Printer Broken?</button>
                 <li> 
             {% endfor %}
         </ul> 
+
     </body> 
 </html>
