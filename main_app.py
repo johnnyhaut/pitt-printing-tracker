@@ -32,11 +32,19 @@ def login_controller():
 
     # Already signed in 
     if "username" in session:
-        return redirect(url_for("map", username=session["username"]))
+        # check if admin or normal user  
+        if session["username"] == "admin": 
+            # redirect admin to admin page 
+            return redirect(url_for("admin"))
+        # otherwise redirect normal user to map 
+        else: 
+            return redirect(url_for("map", username=session["username"]))
 
     # process HTTP GET requests, first time accessing page 
     if request.method == "GET":
-        return render_template("login.html", style=url_for('static', filename='css/login.css'), passport = url_for('static', filename='images/passport-header.png'))
+        return render_template("login.html", style=url_for('static', filename='css/login.css'), 
+                               passport = url_for('static', filename='images/passport-header.png'),
+                               disclaimer= url_for('static', filename='images/disclaimer.png'))
 
     # process HTTP POST requests, user clicked the login button 
     elif request.method == "POST":
@@ -55,8 +63,11 @@ def login_controller():
                 # save info into the session object
                 session["username"] = request.form["user"]
 
-                # redirect the user to his/her map page
-                return redirect(url_for("map", username=entered_username))
+                # redirect the user to the map/admin page
+                if session["username"] == "admin": 
+                    return redirect(url_for("admin"))
+                else: 
+                    return redirect(url_for("map"))
 
             else:
                 # wrong password
@@ -74,7 +85,7 @@ def unlogger():
     # if logged in, log out, otherwise offer to log in
     if "username" in session: 
         session.clear()
-        return render_template("logout.html")
+        return render_template("logout.html", js=url_for('static', filename='js/logout.js'))
     else: 
         return redirect(url_for("login_controller")) 
     
@@ -104,7 +115,8 @@ def admin():
     return render_template("admin.html", 
                            new_printer_summary_reference=url_for("printer_summary"), 
                            printers= printersInJSONFormat, 
-                           style = url_for('static', filename='css/admin.css')
+                           style = url_for('static', filename='css/admin.css'), 
+                           reference_to_logout= url_for("unlogger")
                            )
 
 # Used to show a summary of the new printer added 
@@ -123,7 +135,11 @@ def printer_summary():
     try: 
         db_session.add(printer_obj); 
         db_session.commit()
-        return render_template("printer_summary.html")
+        return render_template("printer_summary.html", 
+                               location = printersLocation,
+                               type = printersType, 
+                               status = printersStatus, 
+                               js = url_for('static', filename='js/printer_summary.js'))
     except:     
         return "There was an issue adding to the database"
 
@@ -140,4 +156,4 @@ def delete_printer(printer_id):
         return 'There was a problem deleting that printer'
 
 if __name__ == "__main__": 
-    app.run()
+    app.run(port=8000)
