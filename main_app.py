@@ -1,5 +1,5 @@
 # Imports for displaying pages to the user 
-from flask import Flask, redirect, url_for, request, session, render_template, abort, jsonify
+from flask import Flask, redirect, url_for, request, session, render_template, abort
 
 # Imports for database information 
 from printer_model import Base, Printer  

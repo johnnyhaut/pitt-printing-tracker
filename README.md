@@ -18,3 +18,13 @@ The API for the Pitt Printing Tracker being built in CS1550. This API will allow
 ## PATCH Requests 
 * User's should be able to report broken printers to the system 
 
+## Running Program 
+1) Activate the virtual environment: 
+* In MacOS: source venv/bin/activate
+* In Windows: .\venv\Scripts\activate
+2) Install the dependencies
+* pip install -r requirements.txt
+3) Running the local server 
+* python main_app.py
+4) Accessing the page
+* Go to 'http://127.0.0.1:8000'

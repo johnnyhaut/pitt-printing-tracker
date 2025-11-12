@@ -16,8 +16,10 @@
                     <h3>Printer Location: {{printer.printer_location}}
                     <h3>{{printer.printer_type}} Printer</h3> 
                     <h3>Status: {{printer.printer_status}}</h3> 
-                    <button>Printer Offline?</button>
-                <li> 
+                    <a href="{{url_for('report_printer', printer_id=printer.id)}}">
+                        <button>Printer Offline?</button> 
+                    </a>                 
+                </li> 
             {% endfor %}
         </ul> 
 
