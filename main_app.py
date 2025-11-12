@@ -103,6 +103,23 @@ def map():
         reference_to_logout= url_for("unlogger"),
         style = url_for('static', filename='css/map.css')
     )
+# Used to display the report page
+@app.route("/report/<int:printer_id>", methods=["GET"])
+def report_printer(printer_id):
+    printer = db_session.query(Printer).get(printer_id)
+    if not printer:
+        abort(404)
+
+    return render_template(
+        "report.html",
+        printer=printer,
+        style=url_for('static', filename='css/report.css')
+    )
+# Used to submit the report
+@app.route("/report/<int:printer_id>", methods=["POST"])
+def submit_report(printer_id):
+    issue_description = request.form.get("issue_description")
+    user_name = request.form.get("user_name")
 
 # Used to display the admin panel 
 @app.route("/admin/")

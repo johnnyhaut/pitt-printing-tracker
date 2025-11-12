@@ -1,0 +1,33 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/report.css') }}">
+    <title>Report Printer</title>
+</head>
+
+<body>
+    <div id="prompt">
+        <h1>Report a Problem with {{ printer.printer_location }}</h1>
+
+        <form action="{{ url_for('submit_report', printer_id=printer.id) }}" method="post">
+
+            <label for="issue_description">Describe the Issue:</label>
+            <select name="issue_description" id="issue_description">
+                <option value="outOfInk">Out of Ink</option>
+                <option value="paperJam">Paper Jam</option>
+                <option value="cannotConnect">Cannot Connect to Device</option>
+                <option value="needsUpdate">Needs Update</option>
+                <option value="other">Other</option>
+            </select>
+            <br><br>
+            <label for="user_name">Your name (optional):</label><br>
+            <input type="text" name="user_name"><br><br>
+
+            <button type="submit">Submit Report</button>
+        </form>
+    </div>
+</body>
+
+</html>
