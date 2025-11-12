@@ -1,5 +1,10 @@
-img {
+#passport {
     width: 100%;
+}
+
+#disc-img {
+    width: 100px; 
+    height: 100px; 
 }
 
 #sign-in-box {
@@ -8,4 +13,14 @@ img {
 
 input {
     margin-top: 20px;
+}
+
+#disclaimer {
+    outline: 5px solid red;
+    color: red;
+    margin-top: 100px;
+    margin-left: auto; 
+    margin-right: auto; 
+    text-align: center;
+    width: 300px;
 }

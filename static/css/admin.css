@@ -2,12 +2,15 @@ body {
     background-color: lightcyan;
 }
 
+h1, #heading {
+    text-align: center;
+}
+
 #printers_ul {
     list-style-type: none;
     text-align: center;
     height: auto;
     width: 100%;
-    min-height: 200px;
 }
 
 .printers_li {
@@ -16,5 +19,12 @@ body {
     background-color: white;
     width:30%;
     margin:10px;
-    height: 185px;
+    height: 215px;
+}
+
+#new-printer-div {
+    margin-left: 15%;
+    clear: both;
+    width: 500px;
+    float: left;
 }
