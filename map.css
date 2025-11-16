@@ -1,0 +1,17 @@
+body {
+    background-color: lightcyan;
+}
+
+#printers_ul {
+    list-style-type: none;
+    text-align: center;
+}
+
+.printers_li {
+    list-style-type: none;
+    float:left;
+    background-color: white;
+    width:30%;
+    margin:10px;
+    height: 220px;
+}

@@ -103,23 +103,35 @@ def map():
         reference_to_logout= url_for("unlogger"),
         style = url_for('static', filename='css/map.css')
     )
-# Used to display the report page
-@app.route("/report/<int:printer_id>", methods=["GET"])
-def report_printer(printer_id):
-    printer = db_session.query(Printer).get(printer_id)
-    if not printer:
-        abort(404)
 
-    return render_template(
-        "report.html",
-        printer=printer,
-        style=url_for('static', filename='css/report.css')
-    )
-# Used to submit the report
-@app.route("/report/<int:printer_id>", methods=["POST"])
-def submit_report(printer_id):
-    issue_description = request.form.get("issue_description")
-    user_name = request.form.get("user_name")
+# Used to display the report page
+@app.route("/report/<int:printer_id>", methods=["GET", "POST"])
+def report_printer(printer_id):
+    #Display page
+    if request.method == "GET":
+        printer = db_session.query(Printer).get(printer_id)
+        if not printer:
+            abort(404)
+
+        return render_template(
+            "report.html",
+            printer=printer,
+            style=url_for('static', filename='css/report.css'))
+    # Used to submit the report
+    if request.method == "POST":
+        issue_description = request.form.get("issue_description")
+        user_name = request.form.get("user_name")
+
+        #Get printer to edit via id
+        printer = db_session.query(Printer).get(printer_id)
+        try:
+            printer.printer_status = "Offline"
+            printer.printer_issue = issue_description
+            db_session.commit()
+            return redirect(url_for("map"))
+        except Exception as e:
+            db_session.rollback()
+            return f"There was an issue reporting the printer:<br><br>{e}"
 
 # Used to display the admin panel 
 @app.route("/admin/")
@@ -142,11 +154,13 @@ def printer_summary():
     printersLocation = request.form.get("newPrinterLocation"); 
     printersType = request.form.get("newPrinterType"); 
     printersStatus = request.form.get("newPrinterStatus"); 
+    printersIssues = request.form.get("newPrinterIssue")
     
     printer_obj = Printer(
                     printer_location = printersLocation,
                     printer_type = printersType,
-                    printer_status = printersStatus
+                    printer_status = printersStatus,
+                    printer_issue = printersIssues
                     )
 
     try: 
@@ -156,6 +170,7 @@ def printer_summary():
                                location = printersLocation,
                                type = printersType, 
                                status = printersStatus, 
+                               issues = printersIssues,
                                js = url_for('static', filename='js/printer_summary.js'))
     except:     
         return "There was an issue adding to the database"

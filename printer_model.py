@@ -13,6 +13,7 @@ class Printer(Base):
     printer_location = Column("location", String, nullable=False)
     printer_type = Column("type", String, nullable=False) 
     printer_status = Column("status",String, nullable=False)
+    printer_issue = Column("issue",String, nullable=False)
     
     # Returns an easily readable JSON containing all of the important printer infomration 
     def toJSON(self): 
@@ -20,4 +21,5 @@ class Printer(Base):
             "id":self.id, 
             "printer_location":self.printer_location, 
             "printer_type":self.printer_type,
-            "printer_status":self.printer_status}
+            "printer_status":self.printer_status,
+            "printer_issue":self.printer_issue}
