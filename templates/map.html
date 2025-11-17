@@ -10,9 +10,15 @@
             <a href="{{reference_to_logout}}">Click Here to Logout</a> 
         </div> 
 
+        <select id="printer_type_selector" onchange="changeMapColor()"> 
+            <option value="any"> Any </option> 
+            <option value="black and white"> Black and White </option> 
+            <option value="color"> Color </option> 
+        </select>
+
         <ul id="printers_ul"> 
             {% for printer in printers %}
-                <li class="printers_li">
+            <li class="printers_li {% if printer.printer_type == 'Black & White' %}bnw{% elif printer.printer_type == 'Color' %}color{% endif %}">
                     <h3>Printer Location: {{printer.printer_location}}
                     <h3>{{printer.printer_type}} Printer</h3> 
                     <h3>Status: {{printer.printer_status}}</h3> 
@@ -26,3 +32,32 @@
 
     </body> 
 </html>
+
+<script>
+    function changeMapColor() {
+        var color = document.getElementById("printer_type_selector").value;
+        if (color == "black and white") {
+            document.querySelectorAll(".color").forEach(function(element) {
+                element.style.display = "none";
+            });
+            document.querySelectorAll(".bnw").forEach(function(element) {
+                element.style.display = "list-item";
+            });
+        } else if (color == "color") {
+            document.querySelectorAll(".bnw").forEach(function(element) {
+                element.style.display = "none";
+            });
+            document.querySelectorAll(".color").forEach(function(element) {
+                element.style.display = "list-item";
+            });
+        } else {
+            document.querySelectorAll(".bnw").forEach(function(element) {
+                element.style.display = "list-item";
+            });
+            document.querySelectorAll(".color").forEach(function(element) {
+                element.style.display = "list-item";
+            });
+        }
+    }
+</script>
+
