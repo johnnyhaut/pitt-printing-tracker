@@ -148,6 +148,20 @@ def admin():
                            reference_to_logout= url_for("unlogger")
                            )
 
+# Used to fix a printer issue
+@app.route("/admin/fix_printer/<printer_id>", methods=["GET", "POST"])
+def fix_printer(printer_id): 
+    printer_to_fix = db_session.query(Printer).get(printer_id)
+    if printer_to_fix is None: 
+        abort(404)
+    try: 
+        printer_to_fix.printer_status = "Online"
+        printer_to_fix.printer_issue = ""
+        db_session.commit()
+        return redirect(url_for("admin"))
+    except: 
+        return 'There was a problem fixing that printer'
+
 # Used to show a summary of the new printer added 
 @app.route("/admin/printer_summary/", methods=["GET", "POST"])
 def printer_summary(): 
