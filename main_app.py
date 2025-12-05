@@ -91,7 +91,7 @@ def unlogger():
     # if logged in, log out, otherwise offer to log in
     if "username" in session: 
         session.clear()
-        return render_template("logout.html", js=url_for('static', filename='js/logout.js'))
+        return render_template("logout.html", style=url_for('static', filename='css/logout.css'), js=url_for('static', filename='js/logout.js'))
     else: 
         return redirect(url_for("login_controller")) 
     

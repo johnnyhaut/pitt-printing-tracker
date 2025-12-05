@@ -2,12 +2,18 @@
     <head>
         <title>Logged Out</title>
         <script type="text/javascript" src="{{js}}"></script>
+        <link rel="stylesheet" type="text/css" href="{{style}}">
     </head> 
 
     <body>
-        <h3> You have successfully been logged out! </h3> 
-        <a href="{{url_for('login_controller')}}">
-                        <button>Return to Login</button> 
-        </a>           
+        <div id="logout-container">
+            <div class="success-icon"></div> 
+
+            <h1> You have successfully been logged out! </h1> 
+
+            <a id="return-btn" href="{{url_for('login_controller')}}">Return to Login</a>       
+            
+            <p id="redirect-notice">You will be automatically redirected in a few moments...</p> 
+        </div>     
     </body> 
 </html> 
