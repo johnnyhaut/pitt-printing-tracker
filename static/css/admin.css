@@ -103,6 +103,13 @@ body {
     margin-bottom: 12px;
 }
 
+.printer-issue {
+    color: #1a202c;
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+
 .printer-type {
     color: #475569;
     font-size: 14px;
