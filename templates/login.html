@@ -7,6 +7,15 @@
 <body>
     <img id="passport" src="{{passport}}">
 
+    {% if error %}
+    <div id="error-message">
+        <div id="error-text">
+            <div id="error-title">ERROR</div> 
+            {{ error }}
+        </div> 
+    </div> 
+    {% endif %}
+
     <div id="sign-in-box"> 
         <form action="" method="post">
             Username:  <input type="text" name="user" />

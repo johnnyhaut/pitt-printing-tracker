@@ -71,14 +71,20 @@ def login_controller():
 
             else:
                 # wrong password
-                print("Login route: POST Request: wrong password: aborting process...")
-                abort(401)
+                error = "Invalid Password, Please make sure you are entering accurate credentials" 
+                
+                return render_template("login.html", style=url_for('static', filename='css/login.css'), 
+                        passport = url_for('static', filename='images/passport-header.png'),
+                        disclaimer= url_for('static', filename='images/disclaimer.png'), 
+                        error = error)
+                
         else:
             # wrong username
-            print(
-                "Login route: POST request: user is not registered in the database: Aborting process...")
-            abort(404)
-
+            error = "Invalid Username, Please make sure you are entering accurate credentials"
+            return render_template("login.html", style=url_for('static', filename='css/login.css'), 
+                    passport = url_for('static', filename='images/passport-header.png'),
+                    disclaimer= url_for('static', filename='images/disclaimer.png'), 
+                    error = error)
 # Sign the user out of their "Pitt" account
 @app.route("/logout/")
 def unlogger(): 
