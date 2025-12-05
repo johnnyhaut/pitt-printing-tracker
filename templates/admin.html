@@ -5,56 +5,79 @@
     </head>
 
     <body>
-        <h1>Pitt Print Tracker Admin</h1>
-        <a href="{{reference_to_logout}}">Click Here to Logout</a> 
 
-        <div>
-            <h2 id="heading">All Pitt Printers</h2>
+        <div class="header">
+            <h1>Pitt Print Tracker Admin</h1>
+            <button class="logout-btn" onclick="window.location.href='{{reference_to_logout}}'">
+                Logout
+            </button>
+        </div> 
+
+        <div class="section">
+            <h2 id="section-title">All Pitt Printers</h2>
 
             <ul id="printers_ul"> 
                 {% for printer in printers %}
+                <div class="printer-card">
                     <li class="printers_li">
-                        <h3>Printer Location: {{printer.printer_location}}</h3> 
-                        <h3>Printer ID: {{printer.id}}</h3> 
+                        <h3 class="printer-location">Printer Location: {{printer.printer_location}}</h3> 
+                        <h3 class='printer-id'>Printer ID: {{printer.id}}</h3> 
                         <h3>{{printer.printer_type}} Printer</h3> 
-                        <h3>Status: {{printer.printer_status}}</h3>   
-                        <a href="{{url_for('report_printer', printer_id=printer.id)}}">
-                            <button>Printer Offline?</button> 
-                        </a> 
-                        {% if printer.printer_status == "Offline" %}
-                        <button onclick="fixPrinter({{printer.id}})">Printer Fixed?</button>
+                        
+                        {% if printer.printer_status == "Online" %}
+                        <h3 class="status-badge status-online">Status: {{printer.printer_status}}</h3>   
+                        {% else %}
+                        <h3 class="status-badge status-offline">Status: {{printer.printer_status}}</h3>   
                         {% endif %}
-                        <a href="{{url_for('delete_printer', printer_id=printer.id)}}">
-                            <button>Delete Printer </button> 
-                        </a> 
+                        
 
-                    <li> 
+                        <div class="card-buttons">
+                            {% if printer.printer_status == "Offline" %}
+                            <button class="btn btn-fixed" onclick="fixPrinter({{printer.id}})">Printer Fixed?</button>
+                            {% else %}
+                            <a href="{{url_for('report_printer', printer_id=printer.id)}}">
+                                <button class="btn btn-offline">Printer Offline?</button> 
+                            </a> 
+                            {% endif %}
+                            <a href="{{url_for('delete_printer', printer_id=printer.id)}}">
+                                <button class="btn btn-delete">Delete Printer </button> 
+                            </a> 
+                        </div> 
+                    </li> 
+                </div> 
                 {% endfor %}
             </ul> 
         </div>
 
-        <div id="new-printer-div">
-            <h2>Add New Printer</h2>
+        <div class="section">
+            <h2 class="section-title">Add New Printer</h2>
 
-            <form action="{{new_printer_summary_reference}}" method="POST"> 
+            <form action="{{new_printer_summary_reference}}" method="POST" class="add-printer-form"> 
 
-                <p>Printer Location: </p>
-                <input type="text" id="newPrinterLocation" name="newPrinterLocation"></label>
+                <div class="form-group">
+                    <label class="form-label" for="newPrinterLocation">Printer Location: </label>
+                    <input type="text" name="newPrinterLocation" class="form-input" placeholder="e.g., Hillman Library 4th Floor"></input>
+                </div> 
+                
+                <div class="form-group">
+                    <label class="form-label" for="newPrinterType">Printer Type: </label>
+                    <input type="text" name="newPrinterType" class="form-input" placeholder="e.g., 'Color' or 'Black & White'"></input>
+                </div> 
 
-                <p>Printer Type: </p>
-                <input type="text" id="newPrinterType" name="newPrinterType"></label>
+                <div class="form-group">
+                    <label class="form-label" for="newPrinterStatus">Printer Status: </label>
+                    <input type="text" name="newPrinterStatus" class="form-input" placeholder="e.g., 'Online' or 'Offline'"></input>
+                </div> 
 
-                <p>Printer Status: </p>
-                <input type="text" id="newPrinterStatus" name="newPrinterStatus"></label>
+                <div class="form-group">
+                    <label class="form-label" for="newPrinterIssue">Printer Issue: </label>
+                    <input type="text" name="newPrinterIssue" class="form-input" placeholder="Optional - describe any issues"></input>
+                </div> 
 
-                <p>Printer Issue: </p>
-                <input type="text" id="newPrinterIssue" name="newPrinterIssue"></label>
-
-                <br><br>
-
-                <input id="submit_button" type="submit" value="Add Printer">
+                <input class="btn-add" type="submit" value="Add Printer">
             </form> 
         </div> 
+
     </body>
 </html>
 
