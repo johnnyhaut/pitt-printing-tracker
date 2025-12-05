@@ -74,6 +74,8 @@ body {
 }
 
 .printer-card {
+    display: flex;
+    flex-direction: column;
     background: #f8fafc;
     border: 2px solid #e2e8f0;
     border-radius: 10px;
@@ -138,6 +140,7 @@ body {
 }
 
 .card-buttons {
+    margin-top: auto;
     display: flex;
     gap: 8px;
 }

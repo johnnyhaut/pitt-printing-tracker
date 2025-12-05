@@ -18,34 +18,32 @@
 
             <ul id="printers_ul"> 
                 {% for printer in printers %}
-                <div class="printer-card">
-                    <li class="printers_li">
-                        <h3 class="printer-location">Printer Location: {{printer.printer_location}}</h3> 
-                        <h3 class='printer-id'>Printer ID: {{printer.id}}</h3> 
-                        <h3>{{printer.printer_type}} Printer</h3> 
-                        
-                        {% if printer.printer_status == "Online" %}
-                        <h3 class="status-badge status-online">Status: {{printer.printer_status}}</h3>   
-                        {% else %}
-                        <h3 class="status-badge status-offline">Status: {{printer.printer_status}}</h3>   
-                        <h3 class="printer-issue">Printer Issue: {{printer.printer_issue}}</h3>
-                        {% endif %}
-                        
+                <li class="printers_li printer-card">
+                    <h3 class="printer-location">Printer Location: {{printer.printer_location}}</h3> 
+                    <h3 class='printer-id'>Printer ID: {{printer.id}}</h3> 
+                    <h3>{{printer.printer_type}} Printer</h3> 
+                    
+                    {% if printer.printer_status == "Online" %}
+                    <h3 class="status-badge status-online">Status: {{printer.printer_status}}</h3>   
+                    {% else %}
+                    <h3 class="status-badge status-offline">Status: {{printer.printer_status}}</h3>   
+                    <h3 class="printer-issue">Printer Issue: {{printer.printer_issue}}</h3>
+                    {% endif %}
+                    
 
-                        <div class="card-buttons">
-                            {% if printer.printer_status == "Offline" %}
-                            <button class="btn btn-fixed" onclick="fixPrinter({{printer.id}})">Printer Fixed?</button>
-                            {% else %}
-                            <a href="{{url_for('report_printer', printer_id=printer.id)}}">
-                                <button class="btn btn-offline">Printer Offline?</button> 
-                            </a> 
-                            {% endif %}
-                            <a href="{{url_for('delete_printer', printer_id=printer.id)}}">
-                                <button class="btn btn-delete">Delete Printer </button> 
-                            </a> 
-                        </div> 
-                    </li> 
-                </div> 
+                    <div class="card-buttons">
+                        {% if printer.printer_status == "Offline" %}
+                        <button class="btn btn-fixed" onclick="fixPrinter({{printer.id}})">Printer Fixed?</button>
+                        {% else %}
+                        <a href="{{url_for('report_printer', printer_id=printer.id)}}">
+                            <button class="btn btn-offline">Printer Offline?</button> 
+                        </a> 
+                        {% endif %}
+                        <a href="{{url_for('delete_printer', printer_id=printer.id)}}">
+                            <button class="btn btn-delete">Delete Printer </button> 
+                        </a> 
+                    </div> 
+                </li> 
                 {% endfor %}
             </ul> 
         </div>
