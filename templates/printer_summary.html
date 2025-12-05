@@ -2,14 +2,46 @@
     <head> 
         <title>NEW PRINTER</title> 
         <script type="text/javascript" src="{{js}}"></script>
+        <link rel="stylesheet" type="text/css" href="{{style}}">
     </head> 
 
     <body> 
-        <div id="printer-summary"> 
-            <h1>New Printer Summary</h1> 
-            <h2>Printer Location: {{location}}</h2> 
-            <h2>Printer Type: {{type}}</h2> 
-            <h2>Printer Status: {{status}}</h2> 
+        <div class="container"> 
+            <div id="success-banner">
+            </div> 
+
+
+            <div id="summary-card"> 
+                <h2 id="summary-title">New Printer Summary</h2> 
+
+                <div class="info-row">
+                    <div class="info-label">Printer Location:</div> 
+                    <div class="info-value">{{location}}</div> 
+                </div> 
+
+                <div class="info-row">
+                    <div class="info-label">Printer Type:</div> 
+                    <div class="info-value">{{type}}</div> 
+                </div>
+
+                <div class="info-row">
+                    <div class="info-label">Printer Status:</div> 
+                    <div class="info-value">{{status}}</div> 
+                </div> 
+
+                {%if issues|length > 0 %}
+                <div class="info-row">
+                    <div class="info-label">Printer Issue:</div> 
+                    <div class="info-value">{{issues}}</div> 
+                </div> 
+                {% endif %}
+
+            </div> 
+
+            <div class="button-group">
+                <a href="{{returnLink}}" class="btn btn-primary">Return to Admin Dashboard</a> 
+            </div> 
+
         </div> 
     </body> 
 

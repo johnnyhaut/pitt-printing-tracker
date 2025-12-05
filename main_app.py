@@ -191,7 +191,9 @@ def printer_summary():
                                type = printersType, 
                                status = printersStatus, 
                                issues = printersIssues,
-                               js = url_for('static', filename='js/printer_summary.js'))
+                               js = url_for('static', filename='js/printer_summary.js'),
+                               style=url_for('static', filename="css/add_printer_summary.css"),
+                               returnLink = url_for("admin"))
     except:     
         return "There was an issue adding to the database"
 
