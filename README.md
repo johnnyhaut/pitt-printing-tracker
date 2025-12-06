@@ -16,6 +16,9 @@ The API for the Pitt Printing Tracker built in Fall 2025 by Group 8, the Pitt Pr
 * User's have the ability to provide feedback after printing 
 * Admin's have the ability to add more printers to the system 
 
+## Default User 
+## Admin User's 
+
 
 ## Running Program 
 1) Create a virtual Environment
@@ -29,3 +32,13 @@ The API for the Pitt Printing Tracker built in Fall 2025 by Group 8, the Pitt Pr
 * python main_app.py
 5) Accessing the page
 * Go to 'http://127.0.0.1:8000' in the browser of your choice
+ 
+###  Logging in with a basic user account you will be able to access the default user interface. If you sign in with an admin account you will access. the admin user interface. 
+```
+users = john : pitt123    , marcos : pitt123  , 
+        brandon : pitt123 , enzo : pitt123    , 
+        deonte : pitt123  , sahil : pitt123   
+        
+        
+admin users = admin : pw
+```
