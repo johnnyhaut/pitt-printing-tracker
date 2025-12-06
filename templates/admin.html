@@ -33,13 +33,13 @@
 
                     <div class="card-buttons">
                         {% if printer.printer_status == "Offline" %}
-                        <button class="btn btn-fixed" onclick="fixPrinter({{printer.id}})">Printer Fixed?</button>
+                        <button class="btn btn-fixed card" onclick="fixPrinter({{printer.id}})">Printer Fixed?</button>
                         {% else %}
-                        <a href="{{url_for('report_printer', printer_id=printer.id)}}">
+                        <a class="card" href="{{url_for('report_printer', printer_id=printer.id)}}">
                             <button class="btn btn-offline">Printer Offline?</button> 
                         </a> 
                         {% endif %}
-                        <a href="{{url_for('delete_printer', printer_id=printer.id)}}">
+                        <a class="card" href="{{url_for('delete_printer', printer_id=printer.id)}}">
                             <button class="btn btn-delete">Delete Printer </button> 
                         </a> 
                     </div> 

@@ -89,6 +89,16 @@ body {
     border-color: #667eea;
 }
 
+.printer-card:hover .card {
+    margin-top: auto;
+    display: flex;
+    gap: 8px;
+}
+
+.card {
+    display: none;
+}
+
 .printer-location {
     color: #667eea;
     font-size: 14px;
