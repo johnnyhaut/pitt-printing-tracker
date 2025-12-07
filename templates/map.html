@@ -4,14 +4,20 @@
         <link rel="stylesheet" type="text/css" href="{{style}}">
     </head>
 
-    <body>
+    <body onload="applyFilters()">
         <div id="header"> 
             <h1> The Pitt Print Tracking Map </h1> 
             
-            <select id="printer_type_selector" onchange="changeMapColor()"> 
+            <select id="printer_type_selector" onchange="applyFilters()"> 
                 <option value="any"> Any </option> 
                 <option value="black and white"> Black and White </option> 
                 <option value="color"> Color </option> 
+            </select>
+
+            <select id="printer_status_selector" onchange="applyFilters()"> 
+                <option value="any"> Any </option> 
+                <option value="online"> Online </option> 
+                <option value="offline"> Offline </option> 
             </select>
 
             <button class="logout-btn" onclick="window.location.href='{{reference_to_logout}}'">
@@ -24,7 +30,9 @@
 
             <ul id="printers_ul"> 
                 {% for printer in printers %}
-                <li class="printers_li printer-card {% if printer.printer_type == 'Black & White' %}bnw{% elif printer.printer_type == 'Color' %}color{% endif %}">
+                <li class="printers_li printer-card 
+                {% if printer.printer_type == 'Black & White' %}bnw{% elif printer.printer_type == 'Color' %}color{% endif %}
+                {% if printer.printer_status == 'Online' %}online{% else %}offline{% endif %}">
                         <h3 class="printer-location">Printer Location: {{printer.printer_location}}
                         <h3>{{printer.printer_type}} Printer</h3> 
                         
@@ -50,30 +58,41 @@
 </html>
 
 <script>
-    function changeMapColor() {
-        var color = document.getElementById("printer_type_selector").value;
-        if (color == "black and white") {
-            document.querySelectorAll(".color").forEach(function(element) {
-                element.style.display = "none";
-            });
-            document.querySelectorAll(".bnw").forEach(function(element) {
-                element.style.display = "list-item";
-            });
-        } else if (color == "color") {
-            document.querySelectorAll(".bnw").forEach(function(element) {
-                element.style.display = "none";
-            });
-            document.querySelectorAll(".color").forEach(function(element) {
-                element.style.display = "list-item";
-            });
-        } else {
-            document.querySelectorAll(".bnw").forEach(function(element) {
-                element.style.display = "list-item";
-            });
-            document.querySelectorAll(".color").forEach(function(element) {
-                element.style.display = "list-item";
-            });
-        }
+    function applyFilters(){
+        const type = document.getElementById("printer_type_selector").value;
+        const status = document.getElementById("printer_status_selector").value;
+
+        const printers = document.querySelectorAll(".printer-card");
+
+        printers.forEach(card => {
+            let matchesType = true;
+            let matchesStatus = true;
+
+            //Color Filter
+            if(type == "black and white"){
+                matchesType = card.classList.contains("bnw");
+            }
+            else if (type == "color"){
+                matchesType = card.classList.contains("color");
+            }
+            //Status Filter
+            if(status == "online"){
+                matchesStatus = card.classList.contains("online");
+            }
+            else if (status == "offline"){
+                matchesStatus = card.classList.contains("offline");
+            }
+            //Add more filters here
+
+            //Show if filters match
+            if(matchesType && matchesStatus){
+                card.style.display = "block";
+            }
+            else{
+                card.style.display = "none";
+            }
+        });
+    
     }
 </script>
 
