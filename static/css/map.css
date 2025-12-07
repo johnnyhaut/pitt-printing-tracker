@@ -37,6 +37,16 @@ body {
     font-weight: 600;
 }
 
+#printer_status_selector{
+    background: #f8fafc;
+    color: #1a202c;
+    border: 2px solid #e2e8f0;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
 .logout-btn {
     background: #ef4444;
     color: white;
