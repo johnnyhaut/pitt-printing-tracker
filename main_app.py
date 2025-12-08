@@ -11,6 +11,14 @@ from functools import wraps
 
 # Imports for password hashing
 from werkzeug.security import generate_password_hash, check_password_hash
+import logging
+
+# Setting up logging
+logging.basicConfig(
+    filename='app.log',
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 
 # Setting up Flask 
 app = Flask(__name__)
@@ -32,6 +40,7 @@ def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if "username" not in session:
+            logging.warning(f"Unauthorized access attempt to {request.path}")
             return redirect(url_for("login_controller"))
         return f(*args, **kwargs)
     return decorated_function
@@ -40,8 +49,10 @@ def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if "username" not in session:
+            logging.warning(f"Unauthorized admin access attempt to {request.path}")
             return redirect(url_for("login_controller"))
         if session["username"] != "admin":
+            logging.warning(f"User {session['username']} attempted to access admin page {request.path}")
             abort(403)  # Forbidden
         return f(*args, **kwargs)
     return decorated_function
@@ -60,10 +71,12 @@ def login_controller():
     if "username" in session:
         # check if admin or normal user  
         if session["username"] == "admin": 
+            logging.info(f"Admin {session['username']} accessed admin page")
             # redirect admin to admin page 
             return redirect(url_for("admin"))
         # otherwise redirect normal user to map 
         else: 
+            logging.info(f"User {session['username']} accessed map page")
             return redirect(url_for("map", username=session["username"]))
 
     # process HTTP GET requests, first time accessing page 
@@ -76,7 +89,7 @@ def login_controller():
     elif request.method == "POST":
         
         entered_username = request.form["user"]
-        
+
         # check if the user is in the users fake database
         if entered_username in users:
             
@@ -90,6 +103,8 @@ def login_controller():
                 # save info into the session object
                 session["username"] = request.form["user"]
 
+                logging.info(f"User {session['username']} logged in successfully")
+
                 # redirect the user to the map/admin page
                 if session["username"] == "admin": 
                     return redirect(url_for("admin"))
@@ -99,6 +114,8 @@ def login_controller():
             else:
                 # wrong password
                 error = "Invalid Password, Please make sure you are entering accurate credentials" 
+
+                logging.warning(f"User {entered_username} failed login attempt due to incorrect password")
                 
                 return render_template("login.html", style=url_for('static', filename='css/login.css'), 
                         passport = url_for('static', filename='images/passport-header.png'),
@@ -107,6 +124,7 @@ def login_controller():
                 
         else:
             # wrong username
+            logging.warning(f"Failed login attempt with invalid username: {entered_username}")
             error = "Invalid Username, Please make sure you are entering accurate credentials"
             return render_template("login.html", style=url_for('static', filename='css/login.css'), 
                     passport = url_for('static', filename='images/passport-header.png'),
@@ -117,9 +135,11 @@ def login_controller():
 def unlogger(): 
     # if logged in, log out, otherwise offer to log in
     if "username" in session: 
+        logging.info(f"User {session['username']} logged out successfully")
         session.clear()
         return render_template("logout.html", style=url_for('static', filename='css/logout.css'), js=url_for('static', filename='js/logout.js'))
     else: 
+        logging.info("Logout attempted without an active session")
         return redirect(url_for("login_controller")) 
     
 
@@ -132,6 +152,7 @@ def map():
     for printer in printers: 
         printersInJSONFormat.append(printer.toJSON())
         
+    logging.info(f"User {session['username']} accessed the map page")
     return render_template("map.html",
         printers = printersInJSONFormat, 
         reference_to_logout= url_for("unlogger"),
@@ -148,6 +169,7 @@ def report_printer(printer_id):
         if not printer:
             abort(404)
 
+        logging.info(f"User {session['username']} accessed report page for printer ID {printer_id}")
         return render_template(
             "report.html",
             printer=printer,
@@ -163,9 +185,11 @@ def report_printer(printer_id):
             printer.printer_status = "Offline"
             printer.printer_issue = issue_description
             db_session.commit()
+            logging.info(f"User {user_name} reported an issue for printer ID {printer_id}: {issue_description}")
             return redirect(url_for("map"))
         except Exception as e:
             db_session.rollback()
+            logging.error(f"Error reporting issue for printer ID {printer_id} by user {user_name}: {e}")
             return f"There was an issue reporting the printer:<br><br>{e}"
 
 # Used to display the admin panel 
@@ -177,6 +201,7 @@ def admin():
     for printer in printers: 
         printersInJSONFormat.append(printer.toJSON())
         
+    logging.info(f"Admin {session['username']} accessed the admin page")
     return render_template("admin.html", 
                            new_printer_summary_reference=url_for("printer_summary"), 
                            printers= printersInJSONFormat, 
@@ -189,14 +214,18 @@ def admin():
 @admin_required
 def fix_printer(printer_id): 
     printer_to_fix = db_session.query(Printer).get(printer_id)
+    logging.info(f"Admin {session['username']} is attempting to fix printer ID {printer_id}")
     if printer_to_fix is None: 
+        logging.error(f"Admin {session['username']} attempted to fix non-existent printer ID {printer_id}")
         abort(404)
     try: 
         printer_to_fix.printer_status = "Online"
         printer_to_fix.printer_issue = ""
         db_session.commit()
+        logging.info(f"Admin {session['username']} fixed printer ID {printer_id}")
         return redirect(url_for("admin"))
     except: 
+        logging.error(f"Admin {session['username']} encountered an error fixing printer ID {printer_id}")
         return 'There was a problem fixing that printer'
 
 # Used to show a summary of the new printer added 
@@ -218,6 +247,7 @@ def printer_summary():
     try: 
         db_session.add(printer_obj); 
         db_session.commit()
+        logging.info(f"Admin {session['username']} added new printer at location {printersLocation}")
         return render_template("printer_summary.html", 
                                location = printersLocation,
                                type = printersType, 
@@ -234,12 +264,15 @@ def printer_summary():
 def delete_printer(printer_id): 
     printer_to_delete = db_session.query(Printer).get(printer_id)
     if printer_to_delete is None: 
+        logging.error(f"Admin {session['username']} attempted to delete non-existent printer ID {printer_id}")
         abort(404)
     try: 
         db_session.delete(printer_to_delete)
         db_session.commit()
+        logging.info(f"Admin {session['username']} deleted printer ID {printer_id}")
         return redirect(url_for("admin"))
     except: 
+        logging.error(f"Admin {session['username']} encountered an error deleting printer ID {printer_id}")
         return 'There was a problem deleting that printer'
 
 if __name__ == "__main__": 
