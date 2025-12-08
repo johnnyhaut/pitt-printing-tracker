@@ -9,6 +9,9 @@ from sqlalchemy.orm import sessionmaker
 # Imports for decorators
 from functools import wraps
 
+# Imports for password hashing
+from werkzeug.security import generate_password_hash, check_password_hash
+
 # Setting up Flask 
 app = Flask(__name__)
 app.secret_key = "we are pitt print trackers!"
@@ -19,10 +22,12 @@ Session = sessionmaker(bind=engine)
 db_session = Session()
 
 # This is in place of the Pitt Passport 
-users = {"john":"pitt123", "marcos":"pitt123", "brandon":"pitt123",
-         "enzo":"pitt123", "deonte":"pitt123", "sahil":"pitt123",
-         "admin":"pw"}
+# Obviously we would NEVER EVER do this in a real application. The plaintext passwords would not be stored in the code, but rather created by the users themselves on signup and stored securely in a database rather than a hash map in the code.
+users = {"john":generate_password_hash("pitt123"), "marcos":generate_password_hash("pitt123"), "brandon":generate_password_hash("pitt123"),
+         "enzo":generate_password_hash("pitt123"), "deonte":generate_password_hash("pitt123"), "sahil":generate_password_hash("pitt123"),
+         "admin":generate_password_hash("pw")}
 
+# Decorators to check if user is logged in or admin
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -80,7 +85,7 @@ def login_controller():
 
             database_password = users[entered_username]
 
-            if entered_password == database_password:
+            if check_password_hash(database_password, entered_password):
                 
                 # save info into the session object
                 session["username"] = request.form["user"]
