@@ -277,3 +277,6 @@ def delete_printer(printer_id):
 
 if __name__ == "__main__": 
     app.run(port=8000)
+
+# Expose Flask app for PythonAnywhere WSGI
+application = app
