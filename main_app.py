@@ -6,6 +6,9 @@ from printer_model import Base, Printer
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+# Imports for decorators
+from functools import wraps
+
 # Setting up Flask 
 app = Flask(__name__)
 app.secret_key = "we are pitt print trackers!"
@@ -19,6 +22,24 @@ db_session = Session()
 users = {"john":"pitt123", "marcos":"pitt123", "brandon":"pitt123",
          "enzo":"pitt123", "deonte":"pitt123", "sahil":"pitt123",
          "admin":"pw"}
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if "username" not in session:
+            return redirect(url_for("login_controller"))
+        return f(*args, **kwargs)
+    return decorated_function
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if "username" not in session:
+            return redirect(url_for("login_controller"))
+        if session["username"] != "admin":
+            abort(403)  # Forbidden
+        return f(*args, **kwargs)
+    return decorated_function
 
 # Default Route sends user to the Pitt Passport 
 @app.route("/")
@@ -56,6 +77,7 @@ def login_controller():
             
             # checking if the right password has been entered
             entered_password = request.form["pass"]
+
             database_password = users[entered_username]
 
             if entered_password == database_password:
@@ -98,6 +120,7 @@ def unlogger():
 
 # Used to show a map of all the printers on campus 
 @app.route("/map/")
+@login_required
 def map(): 
     printers = db_session.query(Printer).all()
     printersInJSONFormat = []
@@ -112,6 +135,7 @@ def map():
 
 # Used to display the report page
 @app.route("/report/<int:printer_id>", methods=["GET", "POST"])
+@login_required
 def report_printer(printer_id):
     #Display page
     if request.method == "GET":
@@ -141,6 +165,7 @@ def report_printer(printer_id):
 
 # Used to display the admin panel 
 @app.route("/admin/")
+@admin_required
 def admin(): 
     printers = db_session.query(Printer).all()
     printersInJSONFormat = []
@@ -156,6 +181,7 @@ def admin():
 
 # Used to fix a printer issue
 @app.route("/admin/fix_printer/<printer_id>", methods=["GET", "POST"])
+@admin_required
 def fix_printer(printer_id): 
     printer_to_fix = db_session.query(Printer).get(printer_id)
     if printer_to_fix is None: 
@@ -170,6 +196,7 @@ def fix_printer(printer_id):
 
 # Used to show a summary of the new printer added 
 @app.route("/admin/printer_summary/", methods=["GET", "POST"])
+@admin_required
 def printer_summary(): 
     printersLocation = request.form.get("newPrinterLocation"); 
     printersType = request.form.get("newPrinterType"); 
@@ -198,6 +225,7 @@ def printer_summary():
         return "There was an issue adding to the database"
 
 @app.route("/admin/delete_printer/<printer_id>")
+@admin_required
 def delete_printer(printer_id): 
     printer_to_delete = db_session.query(Printer).get(printer_id)
     if printer_to_delete is None: 
