@@ -20,7 +20,7 @@ The API for the Pitt Printing Tracker built in Fall 2025 by Group 8, the Pitt Pr
 ## Admin User's 
 
 ## Accessing Program 
-* This program is currently running on 'https://pittprintingtracker.pythonanywhere.com'
+* This program is currently running on 'https://pittprintingtracker.pythonanywhere.com'. For easiest access to the website, simply follow the link.
 
 ## Running Program (Local)
 1) Create a virtual Environment
